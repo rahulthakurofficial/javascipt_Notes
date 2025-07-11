@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benefits Section with Fixed Sidebar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* First section - separate from benefits */
+        .first-part {
+            padding: 2rem;
+            line-height: 1.6;
+            color: #333;
+            background: #f9f9f9;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .first-part h3 {
+            margin: 1.5rem 0 1rem 0;
+            color: #00d4ff;
+        }
+
+        /* Benefits section - completely separate */
+        #benefits-section {
+            display: flex;
+            height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .sidebar {
+            width: 30%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .sidebar h2 {
+            font-size: 1.4rem;
+            margin: 15px 0;
+            text-transform: lowercase;
+            color: #afafaf;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .sidebar h2.active {
+            color: #333333;
+            font-weight: bold;
+            transform: translateX(10px);
+        }
+
+        .sidebar h2.active::before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 40px;
+            background-color: #00d4ff;
+            border-radius: 2px;
+        }
+
+        .sidebar h2:hover {
+            color: #333333;
+            transform: translateX(5px);
+        }
+
+        .benefits-content {
+            margin-left: 30%;
+            width: 70%;
+            height: 100vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            padding: 0 3rem;
+        }
+
+        .section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            line-height: 3.2rem;
+            color: #333333;
+            text-align: center;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .section p {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
+        }
+
+        .section.visible span:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .section.visible span:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .section.visible span:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .benefits-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .benefits-content::-webkit-scrollbar-thumb {
+            background: #00d4ff;
+            border-radius: 10px;
+        }
+
+        .benefits-content::-webkit-scrollbar-thumb:hover {
+            background: #0099cc;
+        }
+
+        .benefits-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #section2 .highlight {
+            color: #0099cc;
+        }
+
+        #section3 .highlight {
+            color: #0099cc;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        #section5 {
+            color: #333;
+        }
+
+
+        .last-part {
+            padding: 2rem;
+            line-height: 1.6;
+            color: #333;
+            background: #f0f0f0;
+            min-height: 50vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 1rem;
+            }
+
+            .sidebar h2 {
+                font-size: 1.2rem;
+                margin: 10px 0;
+            }
+
+            .benefits-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .section {
+                font-size: 1.8rem;
+                line-height: 2.4rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="animation-wrapper">
+        <div class="animation-content">
+            <section class="animation-section hero"></section>
+        </div>
+        <div class="zoom-image-container">
+            <!-- Image with zoom effect -->
+            <img src="./media/vortex-bg.png" alt="Zooming Image">
+        </div>
+    </section>
+
+    <section id="benefits-section">
+        <div class="sidebar">
+            <h2 data-target="section1" class="active">Boost Your Digital Presence</h2>
+            <h2 data-target="section2">Automate Your Business</h2>
+            <h2 data-target="section3">Secure Your Business</h2>
+            <h2 data-target="section4">Scale & Grow</h2>
+            <h2 data-target="section5">Stay Ahead of Competitors</h2>
+        </div>
+
+        <div class="benefits-content">
+            <div id="section1" class="section visible">
+                <p>
+                    <span>Uplift</span>
+                    <span class="highlight">your Digital Presence</span>
+                    <span> with innovative online strategies and modern technology.</span>
+                </p>
+            </div>
+            <div id="section2" class="section">
+                <p>
+                    <span>Automate</span>
+                    <span class="highlight">your Business</span>
+                    <span> to streamline operations, reduce costs, and maximize efficiency.</span>
+                </p>
+            </div>
+            <div id="section3" class="section">
+                <p>
+                    <span>Secure</span>
+                    <span class="highlight">your Virtual Empire</span>
+                    <span> by implementing cutting-edge cybersecurity solutions.</span>
+                </p>
+            </div>
+            <div id="section4" class="section">
+                <p>
+                    <span>Scale up, Boost</span>
+                    <span class="highlight">and Grow</span>
+                    <span> your business with targeted strategies and scalable solutions.</span>
+                </p>
+            </div>
+            <div id="section5" class="section">
+                <p>
+                    <span>Be ahead of your</span>
+                    <span class="highlight">Competitors</span>
+                    <span> by leveraging technology and innovation to stay on top.</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="zoom-in-wrapper">
+        <div class="zoom-in-content">
+            <section class="zoom-in-section hero"></section>
+        </div>
+        <div class="zoom-in-image-container">
+            <!-- Image with zoom-in effect -->
+            <img src="./media/vortex-bg.png" alt="Zooming In Image">
+        </div>
+    </section>
+
+
+
+    <script>
+        const sections = document.querySelectorAll('.section');
+        const sidebarLinks = document.querySelectorAll('.sidebar h2');
+        const benefitsContent = document.querySelector('.benefits-content');
+        const sidebar = document.querySelector('.sidebar');
+        const benefitsSection = document.getElementById('benefits-section');
+
+        function updateActiveSection() {
+            const scrollTop = benefitsContent.scrollTop;
+            const containerHeight = benefitsContent.clientHeight;
+
+            sections.forEach((section, index) => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+
+                if (scrollTop >= sectionTop - containerHeight / 2 &&
+                    scrollTop < sectionTop + sectionHeight - containerHeight / 2) {
+
+                    sidebarLinks.forEach(link => link.classList.remove('active'));
+                    sidebarLinks[index].classList.add('active');
+                    section.classList.add('visible');
+                } else {
+                    section.classList.remove('visible');
+                }
+            });
+        }
+
+        // Show/hide sidebar based on benefits section visibility
+        function checkBenefitsSection() {
+            const rect = benefitsSection.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+            if (isVisible) {
+                sidebar.classList.add('active');
+            } else {
+                sidebar.classList.remove('active');
+            }
+        }
+
+        // Listen for scroll on benefits content
+        benefitsContent.addEventListener('scroll', updateActiveSection);
+
+        // Listen for main page scroll to show/hide sidebar
+        window.addEventListener('scroll', checkBenefitsSection);
+
+        // Sidebar click handlers
+        sidebarLinks.forEach((link, index) => {
+            link.addEventListener('click', () => {
+                const targetSection = sections[index];
+                benefitsContent.scrollTo({
+                    top: targetSection.offsetTop,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Initialize
+        sections[0].classList.add('visible');
+        updateActiveSection();
+        checkBenefitsSection();
+
+
+        // GSAP Zoom-In scroll animation
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.timeline({
+    scrollTrigger: {
+        trigger: ".animation-wrapper",
+        start: "top top",
+        end: "bottom +=100%",
+        pin: true,
+        scrub: 0.5,
+        markers: false,
+        ease: "none",
+        onEnter: () => document.body.classList.remove('scrollable'),
+        onLeave: () => document.body.classList.add('scrollable')
+    },
+})
+.to(".zoom-image-container img", {
+    scale: 2,
+    z: 350,
+    transformOrigin: "center center",
+    ease: "power1.inOut",
+})
+.to(".animation-section.hero", {
+    scale: 1.1,
+    transformOrigin: "center center",
+    ease: "power1.inOut",
+}, "<");
+
+// GSAP Zoom-Out for second image
+gsap.timeline({
+    scrollTrigger: {
+        trigger: ".zoom-in-wrapper",
+        start: "top top",
+        end: "bottom +=100%",
+        pin: true,
+        scrub: 0.5,
+        markers: false,
+        ease: "none",
+        onEnter: () => document.body.classList.remove('scrollable'),
+        onLeave: () => document.body.classList.add('scrollable')
+    },
+})
+.from(".zoom-in-image-container img", {
+    scale: 2,
+    z: 350,
+    transformOrigin: "center center",
+    ease: "power1.inOut",
+})
+.from(".zoom-in-section.hero", {
+    scale: 1.1,
+    transformOrigin: "center center",
+    ease: "power1.inOut",
+}, "<");
+
+    </script>
+</body>
+
+</html>

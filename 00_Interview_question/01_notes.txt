@@ -4,3 +4,6 @@ what is call back function?
 
 
 5:25=>api
+
+
+string , function, Array all are object and after a object it will null
